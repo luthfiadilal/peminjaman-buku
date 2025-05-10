@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Models;
+
+use App\Models\Book;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Category extends Model
+{
+
+    protected $table = 'categories';
+
+    use HasFactory;
+
+    protected $fillable = ['uuid', 'name'];
+
+
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->uuid = (string) \Str::uuid();
+        });
+    }
+}
