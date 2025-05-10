@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('books', function (Blueprint $table) {
-            $table->foreignId('author_id')->constrained()->onDelete('cascade')->after('category_id');
+        Schema::table('borrowings', function (Blueprint $table) {
+            $table->timestamp('returned_at')->nullable();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('books', function (Blueprint $table) {
-            $table->dropColumn('author_id');
+        Schema::table('borrowings', function (Blueprint $table) {
+            $table->dropColumn('returned_at');
         });
     }
 };

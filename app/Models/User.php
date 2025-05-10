@@ -50,6 +50,12 @@ class User extends Authenticatable
         ];
     }
 
+    public function borrowings()
+    {
+        return $this->hasMany(Borrowing::class);
+    }
+
+
     public function isAdmin(): bool
     {
         return $this->role === UserRole::ADMIN;

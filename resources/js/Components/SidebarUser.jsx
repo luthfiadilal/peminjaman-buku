@@ -9,13 +9,13 @@ const menu = [
             {
                 name: 'Book',
                 icon: <BookOpen size={16} />,
-                href: route('dashboard'),
+                href: route('borrow.create'),
             },
 
             {
                 name: 'Peminjaman Buku',
                 icon: <FileText size={16} />,
-                href: '/borrowings',
+                href: route('borrow.index'),
             },
         ],
     },
@@ -23,11 +23,16 @@ const menu = [
 
 export default function SidebarUser() {
     const { url } = usePage();
+    const user = usePage().props.auth.user;
 
     return (
         <aside className="flex h-screen w-64 flex-col bg-blue-600 text-gray-200">
             <div className="px-6 py-4 text-lg font-bold tracking-wide">
-                <Link href="/dashboard-admin">Peminjaman Buku</Link>
+                {user.role === 'admin' ? (
+                    <Link href="/dashboard-admin">Peminjaman Buku</Link>
+                ) : (
+                    <Link href={route('borrow.index')}>Peminjaman Buku</Link>
+                )}
             </div>
 
             <nav className="flex-1 space-y-6 overflow-y-auto px-4 py-2">

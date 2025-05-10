@@ -12,19 +12,43 @@ use Illuminate\Http\Request;
 class BookController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
+        $query = Book::with('authors', 'publisher', 'category');
 
-        $books = Book::with('authors', 'publisher', 'category')->get()->map(function ($book) {
-            $book->formatted_created_at = $book->created_at_formatted;
-            return $book;
-        });
+        $categories = Category::all();
+        // Search by title
+        if ($search = $request->input('search')) {
+            $query->where('title', 'like', "%{$search}%");
+        }
+
+        // Optional: Filter by category
+        if ($category = $request->input('category')) {
+            $query->whereHas('category', function ($q) use ($category) {
+                $q->where('name', $category);
+            });
+        }
+
+        if ($request->sort_by && in_array($request->sort_by, ['title', 'publication_year', 'stock'])) {
+            $query->orderBy($request->sort_by, $request->sort_dir === 'desc' ? 'desc' : 'asc');
+        }
+
+
+        $books = $query->paginate(10)->withQueryString();
 
         return Inertia::render('DashboardAdmin', [
-
-            'books' => $books,
+            'books' => $books->items(),
+            'pagination' => [
+                'total' => $books->total(),
+                'current_page' => $books->currentPage(),
+                'last_page' => $books->lastPage(),
+                'per_page' => $books->perPage(),
+            ],
+            'categories' => $categories,
+            'filters' => $request->only(['search', 'category']),
         ]);
     }
+
 
     public function create()
     {

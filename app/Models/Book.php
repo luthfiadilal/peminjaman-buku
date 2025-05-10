@@ -44,6 +44,10 @@ class Book extends Model
         return $this->belongsToMany(Author::class);
     }
 
+    public function borrowings()
+    {
+        return $this->hasMany(Borrowing::class);
+    }
 
     public function getCreatedAtFormattedAttribute()
     {

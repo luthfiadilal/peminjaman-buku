@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\PublisherController;
 
 Route::get('/', function () {
@@ -18,11 +19,22 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'role:user'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard-user');
 
 
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth'])->group(function () {
+    Route::get('dashboard/borrowings', [BorrowingController::class, 'index'])->name('borrow.index');
+    Route::get('dashboard/book', [BorrowingController::class, 'create'])->name('borrow.create');
+    Route::post('/borrowings', [BorrowingController::class, 'store'])->name('borrow.store');
+    Route::get('dashboard/book/{book}', [BorrowingController::class, 'form'])->name('borrow.form');
+    Route::post('dashboard/borrowings/{borrowing}', [BorrowingController::class, 'returnBook'])->name('borrow.return');
+
+});
+
+
+
+Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard-admin', [BookController::class, 'index'])->name('dashboard-admin');
 
     Route::get('dashboard-admin/publisher', [PublisherController::class, 'index'])->name('publisher.index');

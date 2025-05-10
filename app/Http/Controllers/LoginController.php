@@ -29,9 +29,11 @@ class LoginController extends Controller
 
         if ($user->isAdmin()) {
             return redirect()->intended('/dashboard-admin');
+        } else if ($user->isUser()) {
+            return redirect()->intended('/dashboard');
         }
 
-        return redirect()->intended('/dashboard');
+        // return redirect()->intended('/dashboard');
     }
 
     public function logout(Request $request): RedirectResponse

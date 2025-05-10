@@ -24,6 +24,7 @@ export default function CreateBook({ authors, categories, publishers }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(data.stock);
         post(route('book.store'), {
             onSuccess: () => {
                 reset();
