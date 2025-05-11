@@ -50,7 +50,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/author', [AuthorController::class, 'store'])->name('author.store');
 
     Route::get('dashboard-admin/book/create', [BookController::class, 'create'])->name('book.create');
+    Route::get('dashboard-admin/book/{book}', [BookController::class, 'show'])->name('book.show');
+    Route::get('/book/{book}/edit', [BookController::class, 'edit'])->name('book.edit');
+    Route::put('/book/{book}', [BookController::class, 'update'])->name('book.update');
     Route::post('/book', [BookController::class, 'store'])->name('book.store');
+    Route::delete('/book{book}', [BookController::class, 'destroy'])->name('book.destroy');
 
     Route::get('dashboard-admin/user', [UserController::class, 'index'])->name('user.index');
     Route::get('dashboard-admin/user/{user}', [UserController::class, 'show'])->name('user.show');

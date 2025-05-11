@@ -10,11 +10,12 @@ use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Book extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'uuid', 'title', 'publisher_id', 'category_id', 'author_id', 'publication_year',
@@ -63,18 +64,22 @@ class Book extends Model
         });
 
         static::saving(function ($model) {
-            if (isset($model->pdf_file)) {
+            if ($model->pdf_file instanceof UploadedFile) {
 
-                if ($model->pdf_file instanceof UploadedFile) {
+                // Mengecek apakah file sudah ada dan berbeda
+                if ($model->isDirty('pdf_file')) {
+                    // Menghapus file lama sebelum menyimpan file baru
+                    if ($model->getOriginal('pdf_file')) {
+                        Storage::delete($model->getOriginal('pdf_file'));
+                    }
 
-                    $fileSize = $model->pdf_file->getSize() / 1024;
-
-
+                    // Menyimpan file PDF baru
+                    $fileSize = $model->pdf_file->getSize() / 1024; // dalam KB
                     if ($fileSize < 100 || $fileSize > 500) {
                         throw new \Exception('File size must be between 100 KB and 500 KB');
                     }
 
-
+                    // Menyimpan file baru
                     $model->pdf_file = $model->pdf_file->store('pdfs', 'public');
                 }
             }

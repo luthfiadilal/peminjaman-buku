@@ -1,6 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
+import { route } from 'ziggy-js';
 
 export default function DashboardAdmin({ books, filters = {}, pagination }) {
     const [search, setSearch] = useState(filters.search || '');
@@ -14,6 +15,12 @@ export default function DashboardAdmin({ books, filters = {}, pagination }) {
             sort_by: sortBy,
             sort_dir: sortDir,
         });
+    };
+
+    const handleDelete = (bookId) => {
+        if (confirm('Yakin ingin menghapus buku ini?')) {
+            router.delete(route('book.destroy', bookId));
+        }
     };
 
     return (
@@ -139,10 +146,25 @@ export default function DashboardAdmin({ books, filters = {}, pagination }) {
                                             {book.is_available ? 'Ya' : 'Tidak'}
                                         </td>
                                         <td className="flex space-x-2 whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                                            <button className="rounded-lg bg-blue-500 px-4 py-2 text-sm text-white">
+                                            <button
+                                                onClick={() =>
+                                                    router.get(
+                                                        route(
+                                                            'book.show',
+                                                            book.id,
+                                                        ),
+                                                    )
+                                                }
+                                                className="rounded-lg bg-blue-500 px-4 py-2 text-sm text-white"
+                                            >
                                                 Detail
                                             </button>
-                                            <button className="rounded-lg bg-red-500 px-4 py-2 text-sm text-white">
+                                            <button
+                                                onClick={() =>
+                                                    handleDelete(book.id)
+                                                }
+                                                className="rounded-lg bg-red-500 px-4 py-2 text-sm text-white"
+                                            >
                                                 Hapus
                                             </button>
                                         </td>
