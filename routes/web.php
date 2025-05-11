@@ -40,14 +40,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard-admin/publisher', [PublisherController::class, 'index'])->name('publisher.index');
     Route::get('dashboard-admin/publisher/create', [PublisherController::class, 'create'])->name('publisher.create');
     Route::post('/publisher', [PublisherController::class, 'store'])->name('publisher.store');
+    Route::get('/publisher/{publisher}/edit', [PublisherController::class, 'show'])->name('publisher.edit');
+    Route::put('/publisher/{publisher}', [PublisherController::class, 'update'])->name('publisher.update');
 
     Route::get('dashboard-admin/category', [CategoryController::class, 'index'])->name('category.index');
     Route::get('dashboard-admin/category/create', [CategoryController::class, 'create'])->name('category.create');
     Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
+    Route::get('/category/{category}/edit', [CategoryController::class, 'show'])->name('category.edit');
+    Route::put('/category/{category}', [CategoryController::class, 'update'])->name('category.update');
 
     Route::get('dashboard-admin/author', [AuthorController::class, 'index'])->name('author.index');
     Route::get('dashboard-admin/author/create', [AuthorController::class, 'create'])->name('author.create');
     Route::post('/author', [AuthorController::class, 'store'])->name('author.store');
+    Route::get('/author/{author}/edit', [AuthorController::class, 'show'])->name('author.edit');
+    Route::put('/author/{author}', [AuthorController::class, 'update'])->name('author.update');
 
     Route::get('dashboard-admin/book/create', [BookController::class, 'create'])->name('book.create');
     Route::get('dashboard-admin/book/{book}', [BookController::class, 'show'])->name('book.show');

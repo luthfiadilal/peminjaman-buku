@@ -33,7 +33,7 @@ class PublisherController extends Controller
 
     public function show(Publisher $publisher)
     {
-        return response()->json($publisher);
+        return Inertia::render('EditPublisher', ['publisher' => $publisher]);
     }
 
     public function update(Request $request, Publisher $publisher)
@@ -44,7 +44,7 @@ class PublisherController extends Controller
             'name' => $request->name,
         ]);
 
-        return response()->json($publisher);
+        return redirect()->route('publisher.index')->with('success', 'Publisher created.');
     }
 
     public function destroy(Publisher $publisher)

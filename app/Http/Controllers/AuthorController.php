@@ -32,7 +32,7 @@ class AuthorController extends Controller
 
     public function show(Author $author)
     {
-        return response()->json($author);
+        return Inertia::render('EditAuthor', ['author' => $author]);
     }
 
     public function update(Request $request, Author $author)
@@ -41,7 +41,7 @@ class AuthorController extends Controller
 
         $author->update(['name' => $request->name]);
 
-        return response()->json($author);
+        return redirect()->route('author.index')->with('success', 'Author updated.');
     }
 
     public function destroy(Author $author)

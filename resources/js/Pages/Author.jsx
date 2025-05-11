@@ -37,13 +37,15 @@ export default function Author({ authors }) {
                             <tr key={author.uuid} className="border-t">
                                 <td className="px-4 py-2">{author.name}</td>
                                 <td className="flex justify-center space-x-2 px-4 py-2">
-                                    <button className="rounded-lg bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-700">
-                                        <a
-                                            href={`/authors/${author.uuid}`}
-                                            className="text-white"
-                                        >
-                                            Detail
-                                        </a>
+                                    <button
+                                        onClick={() =>
+                                            router.get(
+                                                route('author.edit', author.id),
+                                            )
+                                        }
+                                        className="rounded-lg bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-700"
+                                    >
+                                        Detail
                                     </button>
                                     <button
                                         onClick={() =>

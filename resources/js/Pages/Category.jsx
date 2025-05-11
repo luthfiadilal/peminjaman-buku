@@ -39,12 +39,18 @@ export default function Category({ categories }) {
                             <tr key={category.uuid} className="border-t">
                                 <td className="px-4 py-2">{category.name}</td>
                                 <td className="flex justify-center space-x-2 px-4 py-2">
-                                    <button className="rounded-lg bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-700">
-                                        <a
-                                            href={`/categories/${category.uuid}`}
-                                        >
-                                            Detail
-                                        </a>
+                                    <button
+                                        onClick={() =>
+                                            router.get(
+                                                route(
+                                                    'category.edit',
+                                                    category.id,
+                                                ),
+                                            )
+                                        }
+                                        className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white"
+                                    >
+                                        Detail
                                     </button>
                                     <button
                                         onClick={() =>

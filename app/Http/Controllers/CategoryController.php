@@ -32,7 +32,9 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        return response()->json($category);
+        return Inertia::render('EditCategory', [
+            'category' => $category
+        ]);
     }
 
     public function update(Request $request, Category $category)
@@ -41,7 +43,7 @@ class CategoryController extends Controller
 
         $category->update(['name' => $request->name]);
 
-        return response()->json($category);
+        return redirect()->route('category.index')->with('success', 'Category updated.');
     }
 
     public function destroy(Category $category)

@@ -39,19 +39,24 @@ export default function Publisher({ publishers }) {
                             <tr key={publisher.uuid} className="border-t">
                                 <td className="px-4 py-2">{publisher.name}</td>
                                 <td className="flex justify-center space-x-2 px-4 py-2">
-                                    <a
-                                        href={`/publishers/${publisher.uuid}`}
-                                        className="text-blue-600 hover:underline"
-                                    >
-                                        Detail
-                                    </a>
                                     <button
                                         onClick={() =>
-                                            handleDelete(publisher.uuid)
+                                            router.get(
+                                                route(
+                                                    'publisher.edit',
+                                                    publisher.id,
+                                                ),
+                                            )
                                         }
-                                        className="text-red-600 hover:underline"
+                                        className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white"
                                     >
-                                        Delete
+                                        Detail
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(book.id)}
+                                        className="rounded-lg bg-red-600 px-4 py-2 text-sm text-white"
+                                    >
+                                        Hapus
                                     </button>
                                 </td>
                             </tr>
