@@ -42,18 +42,21 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/publisher', [PublisherController::class, 'store'])->name('publisher.store');
     Route::get('/publisher/{publisher}/edit', [PublisherController::class, 'show'])->name('publisher.edit');
     Route::put('/publisher/{publisher}', [PublisherController::class, 'update'])->name('publisher.update');
+    Route::delete('/publisher/{publisher}', [PublisherController::class, 'destroy'])->name('publisher.delete');
 
     Route::get('dashboard-admin/category', [CategoryController::class, 'index'])->name('category.index');
     Route::get('dashboard-admin/category/create', [CategoryController::class, 'create'])->name('category.create');
     Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
     Route::get('/category/{category}/edit', [CategoryController::class, 'show'])->name('category.edit');
     Route::put('/category/{category}', [CategoryController::class, 'update'])->name('category.update');
+    Route::delete('/category/{category}', [CategoryController::class, 'destroy'])->name('category.delete');
 
     Route::get('dashboard-admin/author', [AuthorController::class, 'index'])->name('author.index');
     Route::get('dashboard-admin/author/create', [AuthorController::class, 'create'])->name('author.create');
     Route::post('/author', [AuthorController::class, 'store'])->name('author.store');
     Route::get('/author/{author}/edit', [AuthorController::class, 'show'])->name('author.edit');
     Route::put('/author/{author}', [AuthorController::class, 'update'])->name('author.update');
+    Route::delete('/author/{author}', [AuthorController::class, 'destroy'])->name('author.delete');
 
     Route::get('dashboard-admin/book/create', [BookController::class, 'create'])->name('book.create');
     Route::get('dashboard-admin/book/{book}', [BookController::class, 'show'])->name('book.show');
@@ -65,7 +68,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard-admin/user', [UserController::class, 'index'])->name('user.index');
     Route::get('dashboard-admin/user/{user}', [UserController::class, 'show'])->name('user.show');
     Route::put('dashboard-admin/user/{user}', [UserController::class, 'update'])->name('user.update');
-    Route::delete('dashboard-admin/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.delete');
 
 });
 

@@ -9,13 +9,31 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = User::query();
+
+        // Search
+        if ($request->has('search') && $request->search !== '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Sort
+        $sortable = ['name', 'email', 'created_at']; // Field yang boleh disortir
+        $sortBy = in_array($request->sortBy, $sortable) ? $request->sortBy : 'name';
+        $sortDir = $request->sortDir === 'desc' ? 'desc' : 'asc';
+
+
         // Ambil semua user yang rolenya USER
-        $users = User::where('role', UserRole::USER)->get();
+        $users = User::where('role', UserRole::USER)->orderBy($sortBy, $sortDir)->get();
 
         return Inertia::render('User', [
             'users' => $users,
+            'filters' => [
+                'search' => $request->search,
+                'sortBy' => $request->sortBy,
+                'sortDir' => $request->sortDir,
+            ]
         ]);
     }
 
@@ -49,6 +67,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect()->back()->with('success', 'User berhasil dihapus.');
+        return redirect()->route('user.index')->with('success', 'User berhasil dihapus.');
     }
 }

@@ -9,10 +9,30 @@ use Inertia\Response;
 
 class PublisherController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $publishers = Publisher::all();
-        return Inertia::render('Publisher', ['publishers' => $publishers]);
+        $query = Publisher::query();
+
+        // Search
+        if ($request->has('search') && $request->search !== '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Sort
+        $sortable = ['name', 'created_at']; // Field yang boleh disortir
+        $sortBy = in_array($request->sortBy, $sortable) ? $request->sortBy : 'name';
+        $sortDir = $request->sortDir === 'desc' ? 'desc' : 'asc';
+
+        $publishers = $query->orderBy($sortBy, $sortDir)->get();
+
+        return Inertia::render('Publisher', [
+            'publishers' => $publishers,
+            'filters' => [
+                'search' => $request->search,
+                'sortBy' => $request->sortBy,
+                'sortDir' => $request->sortDir,
+            ],
+        ]);
     }
 
     public function create(): Response
@@ -50,6 +70,6 @@ class PublisherController extends Controller
     public function destroy(Publisher $publisher)
     {
         $publisher->delete();
-        return response()->json(null, 204);
+        return redirect()->route('publisher.index')->with('success', 'Publisher deleted.');
     }
 }

@@ -8,11 +8,28 @@ use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $authors = Author::all();
+        $query = Author::query();
+
+        // Search
+        if ($request->has('search') && $request->search !== '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Sort
+        $sortable = ['name', 'created_at']; // Field yang boleh disortir
+        $sortBy = in_array($request->sortBy, $sortable) ? $request->sortBy : 'name';
+        $sortDir = $request->sortDir === 'desc' ? 'desc' : 'asc';
+
+        $authors = $query->orderBy($sortBy, $sortDir)->get();
         return Inertia::render('Author', [
-            'authors' => $authors
+            'authors' => $authors,
+            'filters' => [
+                'search' => $request->search,
+                'sortBy' => $request->sortBy,
+                'sortDir' => $request->sortDir,
+            ]
         ]);
     }
 
@@ -47,6 +64,6 @@ class AuthorController extends Controller
     public function destroy(Author $author)
     {
         $author->delete();
-        return response()->json(null, 204);
+        return redirect()->route('author.index')->with('success', 'Author deleted.');
     }
 }

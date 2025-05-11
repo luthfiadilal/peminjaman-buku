@@ -8,11 +8,30 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $category = Category::all();
+
+        $query = Category::query();
+
+        // Search
+        if ($request->has('search') && $request->search !== '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Sort
+        $sortable = ['name', 'created_at']; // Field yang boleh disortir
+        $sortBy = in_array($request->sortBy, $sortable) ? $request->sortBy : 'name';
+        $sortDir = $request->sortDir === 'desc' ? 'desc' : 'asc';
+
+        $category = $query->orderBy($sortBy, $sortDir)->get();
+
         return Inertia::render('Category', [
-            'categories' => $category
+            'categories' => $category,
+            'filters' => [
+                'search' => $request->search,
+                'sortBy' => $request->sortBy,
+                'sortDir' => $request->sortDir,
+            ]
         ]);
     }
 
@@ -49,6 +68,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return response()->json(null, 204);
+        return redirect()->route('category.index')->with('success', 'Category deleted.');
     }
 }
