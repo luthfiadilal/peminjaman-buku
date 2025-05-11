@@ -12,10 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Auditable;
 
-class Book extends Model
+class Book extends Model implements AuditableContract
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Auditable;
 
     protected $fillable = [
         'uuid', 'title', 'publisher_id', 'category_id', 'author_id', 'publication_year',
@@ -102,4 +104,20 @@ class Book extends Model
             }
         });
     }
+
+    public function generateTags(): array
+    {
+        return ['table:books'];
+    }
+
+    public function generateDescriptionForEvent(string $eventName): string
+    {
+        return match ($eventName) {
+            'created' => 'Menambahkan data buku',
+            'updated' => 'Mengedit data buku',
+            'deleted' => 'Menghapus data buku',
+            default => ucfirst($eventName) . ' data buku',
+        };
+    }
+
 }

@@ -22,7 +22,7 @@ class AuthorController extends Controller
         $sortBy = in_array($request->sortBy, $sortable) ? $request->sortBy : 'name';
         $sortDir = $request->sortDir === 'desc' ? 'desc' : 'asc';
 
-        $authors = $query->orderBy($sortBy, $sortDir)->get();
+         $authors = $query->orderBy($sortBy, $sortDir)->paginate(10)->withQueryString();
         return Inertia::render('Author', [
             'authors' => $authors,
             'filters' => [

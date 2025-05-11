@@ -12,7 +12,7 @@ const BorrowingCard = ({ borrow, isReturned = false }) => (
             {borrow.book.title}
         </h2>
 
-        <div className="space-y-1 text-sm text-gray-600">
+        <div className="flex flex-col gap-2 space-y-1 text-sm text-gray-600">
             <p className="flex items-center gap-2">
                 <MapPin size={16} className="text-gray-500" />
                 <span>Alamat: {borrow.address}</span>
@@ -30,7 +30,7 @@ const BorrowingCard = ({ borrow, isReturned = false }) => (
                     onClick={() =>
                         router.post(route('borrow.return', borrow.id))
                     }
-                    className="mt-3 inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                    className="mt-4inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
                 >
                     Kembalikan Buku
                 </button>

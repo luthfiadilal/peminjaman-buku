@@ -94,7 +94,7 @@ export default function Author({ authors, filters }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {authors.map((author) => (
+                        {authors.data.map((author) => (
                             <tr key={author.uuid} className="border-t">
                                 <td className="px-4 py-2">{author.name}</td>
                                 <td className="flex justify-center space-x-2 px-4 py-2">
@@ -117,7 +117,7 @@ export default function Author({ authors, filters }) {
                                 </td>
                             </tr>
                         ))}
-                        {authors.length === 0 && (
+                        {authors.data.length === 0 && (
                             <tr>
                                 <td className="px-4 py-2" colSpan={2}>
                                     Tidak ada Author.
@@ -126,6 +126,37 @@ export default function Author({ authors, filters }) {
                         )}
                     </tbody>
                 </table>
+
+                <div className="pt-4">
+                    <div className="flex items-center justify-start gap-5 text-sm text-gray-600">
+                        <span>
+                            Halaman {authors.current_page} dari{' '}
+                            {authors.last_page}
+                        </span>
+                        <div className="space-x-4">
+                            {authors.prev_page_url && (
+                                <button
+                                    onClick={() =>
+                                        router.get(authors.prev_page_url)
+                                    }
+                                    className="rounded px-2 py-1 text-sm text-blue-700 transition hover:bg-blue-50 hover:text-blue-900"
+                                >
+                                    &laquo; Sebelumnya
+                                </button>
+                            )}
+                            {authors.next_page_url && (
+                                <button
+                                    onClick={() =>
+                                        router.get(authors.next_page_url)
+                                    }
+                                    className="rounded px-2 py-1 text-sm text-blue-700 transition hover:bg-blue-50 hover:text-blue-900"
+                                >
+                                    Selanjutnya &raquo;
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
             </div>
         </AuthenticatedLayout>
     );

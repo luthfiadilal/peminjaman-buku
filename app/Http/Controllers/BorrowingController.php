@@ -68,8 +68,16 @@ class BorrowingController extends Controller
 
         $book = Book::findOrFail($request->book_id);
 
-        // Optional: tandai buku sebagai tidak tersedia
-        $book->update(['is_available' => false]);
+        if ($book->stock < 1) {
+            return redirect()
+                ->back()
+                ->withErrors(['book_id' => 'Stok buku habis, tidak bisa dipinjam.'])
+                ->withInput();
+        }
+
+
+        $book->decrement('stock');
+
 
         Borrowing::create([
             'user_id' => Auth::id(),
@@ -90,7 +98,7 @@ class BorrowingController extends Controller
         ]);
 
 
-        $borrowing->book->update(['is_available' => true]);
+        $borrowing->book->increment('stock');
 
         return redirect()->route('borrow.index')->with('success', 'Buku berhasil dikembalikan!');
     }

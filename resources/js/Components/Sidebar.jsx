@@ -43,6 +43,11 @@ const menu = [
                 icon: <FileText size={16} />,
                 href: '/borrowings',
             },
+            {
+                name: 'Audit',
+                icon: <FileText size={16} />,
+                href: route('audit.index'),
+            },
         ],
     },
 ];
