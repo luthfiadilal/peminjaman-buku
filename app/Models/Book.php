@@ -120,4 +120,10 @@ class Book extends Model implements AuditableContract
         };
     }
 
+    public function transformAudit(array $data): array
+    {
+        $data['note'] = $this->generateDescriptionForEvent($data['event']);
+        return $data;
+    }
+
 }

@@ -15,8 +15,8 @@ export default function AuditIndex({ audits }) {
                             <tr>
                                 <th className="border-b px-4 py-2">Tanggal</th>
                                 <th className="border-b px-4 py-2">User</th>
-                                <th className="border-b px-4 py-2">Event</th>
-                                <th className="border-b px-4 py-2">Table</th>
+                                <th className="border-b px-4 py-2">Aksi</th>
+                                <th className="border-b px-4 py-2">Tabel</th>
                                 <th className="border-b px-4 py-2">Note</th>
                             </tr>
                         </thead>
@@ -40,9 +40,7 @@ export default function AuditIndex({ audits }) {
                                             .pop()}
                                     </td>
                                     <td className="px-4 py-2">
-                                        {audit.tags?.[0]?.includes('table:')
-                                            ? `Meng${audit.event === 'updated' ? 'edit' : audit.event === 'created' ? 'input' : 'hapus'} data ${audit.auditable_type?.split('\\').pop()?.toLowerCase()}`
-                                            : '-'}
+                                        {audit.note || '-'}
                                     </td>
                                 </tr>
                             ))}

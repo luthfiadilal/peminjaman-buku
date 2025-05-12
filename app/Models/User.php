@@ -11,11 +11,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use OwenIt\Auditing\Contracts\UserResolver;
 use Illuminate\Support\Facades\Auth;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Auditable;
 
-class User extends Authenticatable implements UserResolver
+class User extends Authenticatable implements UserResolver, AuditableContract
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, Auditable;
 
     /**
      * The attributes that are mass assignable.
@@ -72,5 +74,26 @@ class User extends Authenticatable implements UserResolver
     public static function resolve()
     {
         return Auth::user();
+    }
+
+    public function generateTags(): array
+    {
+        return ['table:users'];
+    }
+
+    public function generateDescriptionForEvent(string $eventName): string
+    {
+        return match ($eventName) {
+            'created' => 'Menambahkan data user',
+            'updated' => 'Mengedit data user',
+            'deleted' => 'Menghapus data user',
+            default => ucfirst($eventName) . ' data user',
+        };
+    }
+
+    public function transformAudit(array $data): array
+    {
+        $data['note'] = $this->generateDescriptionForEvent($data['event']);
+        return $data;
     }
 }
